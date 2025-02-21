@@ -13,4 +13,6 @@ public class JWTResponseDTO {
     private String userName;
 
     private UserRole role;
+
+    private String refreshJwt;
 }

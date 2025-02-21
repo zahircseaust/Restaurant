@@ -16,48 +16,45 @@ import java.util.Set;
 @Component
 public class JwtProvider {
 
-   private SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+    private final SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
 
-   public String generateToken(Authentication auth) {
+    // Generate Access Token (Valid for 1 Day)
+    public String generateToken(Authentication auth) {
+        return generateJwt(auth, 86400000); // 1 day expiration
+    }
+
+    // Generate Refresh Token (Valid for 7 Days)
+    public String generateRefreshToken(Authentication auth) {
+        return generateJwt(auth, 604800000); // 7 days expiration
+    }
+
+    // Helper method to generate JWTs
+    private String generateJwt(Authentication auth, long expirationTime) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-       String roles = populateAuthorities(authorities);
+        String roles = populateAuthorities(authorities);
 
-       String jwt = Jwts.builder()
-               .setIssuedAt(new Date())
-               .setExpiration(new Date(new Date().getTime()+86400000))
-               .claim(
-                       "email", auth.getName()
-               )
-               .claim(
-                       "authorities", roles
-               )
-               .signWith(key)
-               .compact();
+        return Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .claim("email", auth.getName())
+                .claim("authorities", roles)
+                .signWith(key)
+                .compact();
+    }
 
-       return jwt;
-   }
+    // Extract email from JWT
+    public String getEmailFromJwtToken(String jwt) {
+        jwt = jwt.substring(7);
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+        return String.valueOf(claims.get("email"));
+    }
 
-   public String getEmailFromJwtToken(String jwt){
-
-       jwt = jwt.substring(7);
-
-       Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-
-       String email = String.valueOf(
-               claims.get("email")
-       );
-
-       return email;
-
-   }
-
-    private String populateAuthorities(Collection<? extends  GrantedAuthority> authorities) {
-
-       Set<String> auths = new HashSet<>();
-
-       for (GrantedAuthority authority : authorities) {
-           auths.add(authority.getAuthority());
-       }
-       return String.join(",", auths);
+    // Extract roles from JWT
+    private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Set<String> auths = new HashSet<>();
+        for (GrantedAuthority authority : authorities) {
+            auths.add(authority.getAuthority());
+        }
+        return String.join(",", auths);
     }
 }
