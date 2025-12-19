@@ -6,7 +6,9 @@ import lombok.Data;
 @Data
 public class JWTResponseDTO {
 
-    private String jwt;
+    private String token;
+
+    private String refreshToken;
 
     private String email;
 
@@ -14,5 +16,5 @@ public class JWTResponseDTO {
 
     private UserRole role;
 
-    private String refreshJwt;
+
 }

@@ -50,7 +50,7 @@ public class UserController {
         String jwt = jwtProvider.generateToken(authentication);
 
         JWTResponseDTO jwtResponseDTO = new JWTResponseDTO();
-        jwtResponseDTO.setJwt(jwt);
+        jwtResponseDTO.setToken(jwt);
         jwtResponseDTO.setEmail(user.getEmail());
         jwtResponseDTO.setRole(user.getRole());
         jwtResponseDTO.setUserName(user.getFullName());
@@ -82,8 +82,8 @@ public class UserController {
         User user = userService.userByEmail(userDTO.getEmail());
 
         JWTResponseDTO jwtResponseDTO = new JWTResponseDTO();
-        jwtResponseDTO.setJwt(jwt);
-        jwtResponseDTO.setRefreshJwt(refreshJwt);  // Include Refresh Token
+        jwtResponseDTO.setToken(jwt);
+        jwtResponseDTO.setRefreshToken(refreshJwt);  // Include Refresh Token
         jwtResponseDTO.setEmail(userDTO.getEmail());
         jwtResponseDTO.setUserName(user.getFullName());
         jwtResponseDTO.setRole(user.getRole());

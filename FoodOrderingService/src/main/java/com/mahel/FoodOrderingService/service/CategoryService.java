@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public Category createCategory(String name, Long restaurantId);
+    Category createCategory(String name, Long restaurantId);
 
-    public List<Category> findCategoryByRestaurantId(Long id) throws Exception;
+    List<Category> findCategoryByRestaurantId(Long id) throws Exception;
 
-    public Category findCategoryById(Long id) throws Exception;
+    Category findCategoryById(Long id) throws Exception;
 
 }
