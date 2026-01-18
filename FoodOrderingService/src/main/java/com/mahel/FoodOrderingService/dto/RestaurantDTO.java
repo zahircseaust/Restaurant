@@ -1,11 +1,14 @@
 package com.mahel.FoodOrderingService.dto;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,7 +20,7 @@ public class RestaurantDTO {
     private String title;
 
     @Column(length = 1000)
-    private List<String> images;
+    private List<String> images;     // ← THIS IS THE PROBLEM
 
     @Column(length = 1000)
     private String description;
